@@ -1,7 +1,8 @@
 package com.isep.acme.services.impl;
 
 import com.isep.acme.controllers.ResourceNotFoundException;
-import com.isep.acme.model.*;
+import com.isep.acme.model.Review;
+import com.isep.acme.model.User;
 import com.isep.acme.model.dtos.CreateReviewDTO;
 import com.isep.acme.model.dtos.ReviewDTO;
 import com.isep.acme.model.mappers.ReviewMapper;
@@ -10,6 +11,7 @@ import com.isep.acme.repositories.UserRepository;
 import com.isep.acme.services.RestService;
 import com.isep.acme.services.ReviewService;
 import com.isep.acme.services.UserService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +37,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     RestService restService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public Iterable<Review> getAll() {
