@@ -5,3 +5,8 @@ services:
     build: .
     ports:
       - "9008:8080"
+    networks:
+      - acme
+networks:
+  acme:
+    external: true
