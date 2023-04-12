@@ -9,7 +9,14 @@ import java.util.List;
 public class ReviewMapper {
 
     public static ReviewDTO toDto(Review review){
-        return new ReviewDTO(review.getIdReview(), review.getReviewText(), review.getPublishingDate(), review.getApprovalStatus(), review.getFunFact(),2/*, review.getUpVote().size()*/);
+        return new ReviewDTO(
+                review.getIdReview(),
+                review.getRID(),
+                review.getReviewText(),
+                review.getPublishingDate(),
+                review.getApprovalStatus(),
+                review.getFunFact(),
+                review.getUpVote().size());
     }
 
     public static List<ReviewDTO> toDtoList(List<Review> review) {

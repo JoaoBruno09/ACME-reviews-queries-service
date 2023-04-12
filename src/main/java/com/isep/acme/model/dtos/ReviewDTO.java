@@ -5,14 +5,16 @@ import java.time.LocalDate;
 public class ReviewDTO {
 
     private Long idReview;
+    private String RID;
     private String reviewText;
     private LocalDate publishingDate;
     private String approvalStatus;
     private String funFact;
     private Integer vote;
 
-    public ReviewDTO(Long idReview, String reviewText, LocalDate publishingDate, String approvalStatus, String funFact, Integer vote) {
+    public ReviewDTO(Long idReview, String rId, String reviewText, LocalDate publishingDate, String approvalStatus, String funFact, Integer vote) {
         this.idReview = idReview;
+        this.RID = rId;
         this.reviewText = reviewText;
         this.publishingDate = publishingDate;
         this.approvalStatus = approvalStatus;
@@ -26,6 +28,14 @@ public class ReviewDTO {
 
     public Long getIdReview() {
         return this.idReview;
+    }
+
+    public String getRID() {
+        return RID;
+    }
+
+    public void setRID(String RID) {
+        this.RID = RID;
     }
 
     public String getReviewText() {
