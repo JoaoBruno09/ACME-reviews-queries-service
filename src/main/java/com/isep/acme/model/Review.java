@@ -56,24 +56,23 @@ public class Review {
 
     protected Review(){}
 
-    public Review(final Long idReview, final String RID, final long version, final String approvalStatus, final String reviewText, final LocalDate publishingDate, final String funFact) {
+    public Review(final Long idReview, final String RID, final long version, final String approvalStatus, final String reviewText, final LocalDate publishingDate, final String productSku, final String funFact, final Long userId) {
         this.idReview = Objects.requireNonNull(idReview);
         this.version = Objects.requireNonNull(version);
-        setRID("R" + UUID.randomUUID().toString().substring(0,8));
+        this.RID= Objects.requireNonNull(RID);
         setApprovalStatus(approvalStatus);
         setReviewText(reviewText);
         setPublishingDate(publishingDate);
         setFunFact(funFact);
     }
 
-    public Review(final Long idReview, final String RID, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, final String funFact, Product product, User user) {
-        this(idReview, RID, version, approvalStatus, reviewText, publishingDate, funFact);
+    public Review(final Long idReview, final String RID, final long version, final String approvalStatus, final  String reviewText, final List<Vote> upVote, final List<Vote> downVote, final String report, final LocalDate publishingDate, Product product,  final String funFact, final User user) {
+        this(idReview, RID, version, approvalStatus, reviewText, publishingDate, product.getSku(), funFact, user.getUserId());
         setUpVote(upVote);
         setDownVote(downVote);
         setReport(report);
         setProduct(product);
         setUser(user);
-
     }
 
     public Review(final String reviewText, LocalDate publishingDate, Product product, String funFact, User user) {
@@ -107,9 +106,9 @@ public class Review {
     public Boolean setApprovalStatus(String approvalStatus) {
 
         if( approvalStatus.equalsIgnoreCase("pending") ||
-            approvalStatus.equalsIgnoreCase("approved") ||
-            approvalStatus.equalsIgnoreCase("rejected")) {
-            
+                approvalStatus.equalsIgnoreCase("approved") ||
+                approvalStatus.equalsIgnoreCase("rejected")) {
+
             this.approvalStatus = approvalStatus;
             return true;
         }
