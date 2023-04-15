@@ -3,9 +3,10 @@ package com.isep.acme.model.dtos;
 import com.isep.acme.model.Product;
 import com.isep.acme.model.User;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ReviewDTO {
+public class ReviewDTO implements Serializable {
 
     private Long idReview;
     private String RID;
