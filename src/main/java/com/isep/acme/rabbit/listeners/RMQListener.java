@@ -6,7 +6,9 @@ import com.isep.acme.model.Review;
 import com.isep.acme.model.User;
 import com.isep.acme.model.Vote;
 import com.isep.acme.model.dtos.ReviewDTO;
+import com.isep.acme.model.dtos.VoteReviewDTO;
 import com.isep.acme.model.mappers.ReviewMapper;
+import com.isep.acme.model.mappers.VoteMapper;
 import com.isep.acme.repositories.ProductRepository;
 import com.isep.acme.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -31,6 +33,8 @@ public class RMQListener {
     @Autowired
     UserRepository uRepository;
 
+    private static final VoteMapper VOTE_MAPPER = VoteMapper.INSTANCE;
+
     @RabbitListener(queues = "#{queue.name}")
     public void listener(Message message){
         final String action= message.getMessageProperties().getHeader("action");
@@ -48,9 +52,10 @@ public class RMQListener {
             System.out.println("Received Review Message " + review);
             reviewListener.listenedReview(review, action);
         }else if (action.equals(Constants.VOTE_HEADER)){
-            final Vote vote = (Vote) messageConverter.fromMessage(message);
+            final VoteReviewDTO voteDTO = (VoteReviewDTO) messageConverter.fromMessage(message);
+            Vote vote = VOTE_MAPPER.toVote(voteDTO);
             System.out.println("Received Vote Message " + vote);
-            voteListener.listenedVote(vote);
+            voteListener.listenedVote(voteDTO.getRID(), vote);
         }
     }
 
