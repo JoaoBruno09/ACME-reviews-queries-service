@@ -4,5 +4,5 @@ import com.isep.acme.model.Vote;
 
 public interface VoteListener {
 
-    void listenedVote(Vote vote);
+    void listenedVote(String RID, Vote vote);
 }
