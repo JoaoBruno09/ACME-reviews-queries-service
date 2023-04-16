@@ -2,10 +2,12 @@ package com.isep.acme.rabbit.listeners.impl;
 
 import com.isep.acme.model.Review;
 import com.isep.acme.model.Vote;
+import com.isep.acme.model.dtos.VoteReviewDTO;
 import com.isep.acme.model.mappers.VoteMapper;
 import com.isep.acme.rabbit.listeners.VoteListener;
 import com.isep.acme.repositories.ReviewRepository;
 import com.isep.acme.repositories.VoteRepository;
+import com.isep.acme.services.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,33 +23,18 @@ public class VoteListeneImpl implements VoteListener {
     private final VoteRepository voteRepository;
     @Autowired
     ReviewRepository reviewRepository;
+    ReviewService reviewService;
 
     private static final VoteMapper VOTE_MAPPER = VoteMapper.INSTANCE;
 
     @Override
-    public void listenedVote(String RID, Vote vote) {
-        if(vote != null){
-            final Optional<Vote> voteToAction = voteRepository.findByVID(vote.getVID());
-            if(voteToAction.isEmpty()){
-                Vote voteToAdd = voteRepository.save(vote);
-                if (addVoteToReview(RID, voteToAdd)) {
-                    System.out.println("Vote Added " + voteToAdd);
-                }
+    public void listenedVote(VoteReviewDTO voteReviewDTO) {
+        if(voteReviewDTO != null){
+            Vote vote = VOTE_MAPPER.toVote(voteReviewDTO);
+            Vote vote2 = voteRepository.save(vote);
+            if (reviewService.addVoteToReview(voteReviewDTO, vote2)) {
+                System.out.println("Vote Added ");
             }
         }
-    }
-
-    @Transactional
-    private boolean addVoteToReview(String RID, Vote vote) {
-        Optional<Review> review = this.reviewRepository.findByRID(RID);
-
-        if (review.isEmpty()) return false;
-
-        if (vote.getVote().equalsIgnoreCase("upVote") && review.get().addUpVote(vote)
-                || vote.getVote().equalsIgnoreCase("downVote") && review.get().addDownVote(vote)) {
-            reviewRepository.save(review.get());
-            return true;
-        }
-        return false;
     }
 }
